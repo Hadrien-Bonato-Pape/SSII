@@ -73,7 +73,7 @@ for nb in dimImg: # for each sound (file)
     # print("BOWs : ", bows)
 
 #ready for the logistic regression
-logisticRegr = LogisticRegression(max_iter=100)
+logisticRegr = LogisticRegression(max_iter=1000)
 print(groundTruth)
 logisticRegr.fit(bows, groundTruth)
 with open(baryName+'.logr', 'wb') as output:
