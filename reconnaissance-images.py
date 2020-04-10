@@ -7,11 +7,13 @@ import shutil
 from sklearn.cluster import KMeans
 from sklearn.linear_model import LogisticRegression
 import numpy as np
+from sklearn.metrics import f1_score
  
 # usage: python3 recoimages2018.py k1 category1 category2 baryName verbose
 # ATTENTION: les noms de fichiers ne doivent comporter ni - ni espace
 
-#sur ligne de commande: le parametre k de k-means, les 2 répertoires, la racine du nom de fichier de sauvegarde de kmean et regressionlogistique puis un param de verbose
+#sur ligne de commande: le parametre k de k-means, les 2 répertoires,
+#la racine du nom de fichier de sauvegarde de kmean et regressionlogistique puis un param de verbose
 k1 = int(argv[1])
 
 cat1 = argv[2]
@@ -27,6 +29,9 @@ else:
 listImg=glob.glob(cat1+"/*.jpeg")
 tmpa = len(listImg)
 listImg += glob.glob(cat2+"/*.jpeg")
+
+print("Catégorie " + cat1 + "est normalement 0.")
+print("Catégorie " + cat2 + "est normalement 1.")
                
 lesSift = np.empty(shape=(0, 128), dtype=float) # array of all SIFTS from all images
 dimImg = [] # nb of sift per file
@@ -51,7 +56,7 @@ bows = np.empty(shape=(0,k1),dtype=float)
 
 # everything ready for the k-means
 kmeans1 = KMeans(n_clusters=k1, random_state=0).fit(lesSift)
-with open(baryName+'k1.bary', 'wb') as output:
+with open(baryName+'k.bary', 'wb') as output:
     pickle.dump(kmeans1, output, pickle.HIGHEST_PROTOCOL)
 
 bary1 = kmeans1.cluster_centers_;
@@ -76,7 +81,7 @@ for nb in dimImg: # for each sound (file)
 logisticRegr = LogisticRegression(max_iter=1000)
 print(groundTruth)
 logisticRegr.fit(bows, groundTruth)
-with open(baryName+'.logr', 'wb') as output:
+with open(baryName+'L.logr', 'wb') as output:
     pickle.dump(logisticRegr, output, pickle.HIGHEST_PROTOCOL)
 
 
@@ -84,3 +89,6 @@ if verbose:
     res = logisticRegr.predict(bows)
     score = logisticRegr.score(bows, groundTruth)
     print("train score = ", score)
+    print("f1 score = ",f1_score(groundTruth, res, average='binary'))
+
+
