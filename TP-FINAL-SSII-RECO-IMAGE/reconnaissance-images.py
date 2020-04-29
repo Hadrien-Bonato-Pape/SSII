@@ -56,7 +56,6 @@ bows = np.empty(shape=(0,k1),dtype=float)
 
 # everything ready for the k-means
 kmeans1 = KMeans(n_clusters=k1, random_state=0).fit(lesSift)
-
 with open(baryName+'k.bary', 'wb') as output:
     pickle.dump(kmeans1, output, pickle.HIGHEST_PROTOCOL)
 
@@ -89,7 +88,7 @@ with open(baryName+'L.logr', 'wb') as output:
 if verbose:
     res = logisticRegr.predict(bows)
     score = logisticRegr.score(bows, groundTruth)
-    print("f1 score = ",f1_score(groundTruth, res, average='binary'))
     print("train score = ", score)
+    print("f1 score = ",f1_score(groundTruth, res, average='binary'))
 
 
