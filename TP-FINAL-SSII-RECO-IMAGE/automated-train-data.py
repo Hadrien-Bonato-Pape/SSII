@@ -9,13 +9,13 @@ from sklearn.linear_model import LogisticRegression
 import numpy as np
 from sklearn.metrics import f1_score
  
-cat1 = "/Users/hbp/Documents/GitHub/SSII/TP-FINAL-SSII-RECO-IMAGE/images3/train/formule1"
-cat2 = "/Users/hbp/Documents/GitHub/SSII/TP-FINAL-SSII-RECO-IMAGE/images3/train/motoGrandPrix"
+cat1 = "/Users/hbp/Documents/GitHub/SSII/TP-FINAL-SSII-RECO-IMAGE/images/train/formule1"
+cat2 = "/Users/hbp/Documents/GitHub/SSII/TP-FINAL-SSII-RECO-IMAGE/images/train/motoGrandPrix"
 
 def automatedTrainData(k1):
     print("--------------------------------------------")
     print("k = ", k1)
-    baryName = "/Users/hbp/Documents/GitHub/SSII/TP-FINAL-SSII-RECO-IMAGE/bary-logr-images3/k" + str(k1)
+    baryName = "/Users/hbp/Documents/GitHub/SSII/TP-FINAL-SSII-RECO-IMAGE/bary-logr/k" + str(k1)
 
     listImg=glob.glob(cat1+"/*.jpeg")
     tmpa = len(listImg)

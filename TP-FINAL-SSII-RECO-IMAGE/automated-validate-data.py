@@ -61,7 +61,7 @@ def automatedValidateData(k1):
     print(groundTruth)
 
     score = logisticRegr.score(bows, groundTruth)
-    print("f1 score = ",f1_score(groundTruth, res))
+    print("f1 score = ",f1_score(groundTruth, res, average='binary'))
     print("train score = ", score)
 
 
