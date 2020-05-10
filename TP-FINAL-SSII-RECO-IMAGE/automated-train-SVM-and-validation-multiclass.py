@@ -16,15 +16,26 @@ def automatedTrainDataForSVM(c1, k1, toRecomputeKMEANS, verbose, minimal):
 
     #************************************************* INIT
         
-    baryName = "/Users/hbp/Documents/GitHub/SSII/TP-FINAL-SSII-RECO-IMAGE/bary-logr-images3/k" + str(k1)
-    listImg=glob.glob(cat1+"/*.jpeg")
-    tmpa = len(listImg)
-    listImg += glob.glob(cat2+"/*.jpeg")     
-    lesSift = np.empty(shape=(0, 128), dtype=float)
+    baryName = "/Users/hbp/Documents/GitHub/SSII/TP-FINAL-SSII-RECO-IMAGE/bary-logr-images/k" + str(k1)
     dimImg = []
-    groundTruth = [0]*tmpa
-    tmpb = len(listImg)-tmpa
-    groundTruth += [1]*tmpb
+    
+    listImg=glob.glob(cat1+"/*.jpeg")
+    tmp1 = len(listImg)
+    groundTruth = [0] * tmp1
+                                                                                                     
+    listImg += glob.glob(cat2+"/*.jpeg")
+    tmp2 = len(listImg) - tmp1
+    groundTruth += [1] * tmp2
+
+    listImg += glob.glob(cat3+"/*.jpeg")
+    tmp3 = len(listImg) - (tmp1 + tmp2)
+    groundTruth += [2] * tmp3
+
+    listImg += glob.glob(cat4+"/*.jpeg")
+    tmp4 = len(listImg) - (tmp1 + tmp2 + tmp3)
+    groundTruth += [3] * tmp4
+    
+    lesSift = np.empty(shape=(0, 128), dtype=float)
 
     #************************************************* SIFT
 
