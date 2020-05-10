@@ -16,7 +16,7 @@ def automatedTrainDataForSVM(c1, k1, toRecomputeKMEANS, verbose, minimal):
 
     #************************************************* INIT
         
-    baryName = "/Users/hbp/Documents/GitHub/SSII/TP-FINAL-SSII-RECO-IMAGE/bary-logr-images/k" + str(k1)
+    baryName = "./bary-logr-TP-fin/k" + str(k1)
     dimImg = []
     
     listImg=glob.glob(cat1+"/*.jpeg")
@@ -27,11 +27,11 @@ def automatedTrainDataForSVM(c1, k1, toRecomputeKMEANS, verbose, minimal):
     tmp2 = len(listImg) - tmp1
     groundTruth += [1] * tmp2
 
-    listImg += glob.glob(cat3+"/*.jpeg")
+    listImg += glob.glob(cat3+"/*.jpg")
     tmp3 = len(listImg) - (tmp1 + tmp2)
     groundTruth += [2] * tmp3
 
-    listImg += glob.glob(cat4+"/*.jpeg")
+    listImg += glob.glob(cat4+"/*.jpg")
     tmp4 = len(listImg) - (tmp1 + tmp2 + tmp3)
     groundTruth += [3] * tmp4
     
