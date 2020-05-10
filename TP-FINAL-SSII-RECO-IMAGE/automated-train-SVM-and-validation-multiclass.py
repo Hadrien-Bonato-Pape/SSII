@@ -8,6 +8,7 @@ from sklearn.cluster import KMeans
 from sklearn.linear_model import LogisticRegression
 import numpy as np
 from sklearn.metrics import f1_score
+from sklearn.metrics import confusion_matrix
 
 def automatedTrainDataForSVM(c1, k1, toRecomputeKMEANS, verbose, minimal):
     if(minimal):
@@ -102,18 +103,29 @@ def automatedValidateDataSVM(c1, k1):
 
     #************************************************* INIT
     
-    baryName = "/Users/hbp/Documents/GitHub/SSII/TP-FINAL-SSII-RECO-IMAGE/bary-logr-images3/k" + str(k1)
+    baryName = "./bary-logr-TP-fin/k" + str(k1)
+    dimImg = []
+    
     listImg=glob.glob(cat1+"/*.jpeg")
-    tmpa = len(listImg)
+    tmp1 = len(listImg)
+    groundTruth = [0] * tmp1
+                                                                                                     
     listImg += glob.glob(cat2+"/*.jpeg")
-    lesSift = np.empty(shape=(0, 128), dtype=float) # array of all SIFTS from all images
-    dimImg = [] # nb of sift per file
-    groundTruth = [0]*tmpa # result we would like to reach
-    tmpb = len(listImg)-tmpa
-    groundTruth += [1]*tmpb
+    tmp2 = len(listImg) - tmp1
+    groundTruth += [1] * tmp2
+
+    listImg += glob.glob(cat3+"/*.jpg")
+    tmp3 = len(listImg) - (tmp1 + tmp2)
+    groundTruth += [2] * tmp3
+
+    listImg += glob.glob(cat4+"/*.jpg")
+    tmp4 = len(listImg) - (tmp1 + tmp2 + tmp3)
+    groundTruth += [3] * tmp4
     
+    lesSift = np.empty(shape=(0, 128), dtype=float)
+
     #************************************************* SIFT
-    
+
     for s in listImg:
         image = cv2.imread(s)
         gray = cv2.cvtColor(image,cv2.COLOR_BGR2GRAY)
@@ -151,47 +163,37 @@ def automatedValidateDataSVM(c1, k1):
     res = classif.predict(bows)
     print(res)
     print(groundTruth)
-    f1Score = f1_score(groundTruth, res)
+    f1Score = f1_score(groundTruth, res, average='macro')
     print("F1 score = ", f1Score)
+    confu = confusion_matrix(groundTruth, res)
+    print("Matrice de confusion = ", confu)
     print(" ")
-    return f1Score
+    
 
 #------------------------------------------------------------------------------------------------------------------------------------- Pseudo Main
 toRecomputeKMEANS = False
-verbose = False
+verbose = True
 minimal = True
-c1 = 0.1
-k1 = 25
+c1 = 20
+k1 = 50
 f1Scores = []
-interval = 0.1
-maxC1 = 1
+workingDir = "./images-TP-fin/"
 
-while(c1 < maxC1):
-    print("--------------------------------------------")
-    print("Training SVM")
-    cat1 = "/Users/hbp/Documents/GitHub/SSII/TP-FINAL-SSII-RECO-IMAGE/images3/train/formule1"
-    cat2 = "/Users/hbp/Documents/GitHub/SSII/TP-FINAL-SSII-RECO-IMAGE/images3/train/motoGrandPrix"
-    automatedTrainDataForSVM(c1, k1, toRecomputeKMEANS, verbose, minimal) #Training
-    cat1 = "/Users/hbp/Documents/GitHub/SSII/TP-FINAL-SSII-RECO-IMAGE/images3/validation/formule1"
-    cat2 = "/Users/hbp/Documents/GitHub/SSII/TP-FINAL-SSII-RECO-IMAGE/images3/validation/motoGrandPrix"
-    print("Validate with F1 score (with validate data -> pictures)")
-    f1Scores.append(automatedValidateDataSVM(c1, k1))
-    c1 = c1 + interval
 
-maxF1 = max(f1Scores)
-i = 0
-intervalRecherche = interval
+
 print("--------------------------------------------")
-print("Find best F1 SCORE : ")
-print("Best F1 SCORE = ", maxF1)
-print("For values of C : ")
+print("Training SVM")
+cat1 = workingDir + "train/formule1"
+cat2 = workingDir + "train/motoGrandPrix"
+cat3 = workingDir + "train/chat4"
+cat4 = workingDir + "train/chien3"
+automatedTrainDataForSVM(c1, k1, toRecomputeKMEANS, verbose, minimal) #Training
 
-while(intervalRecherche < maxC1):
-    if(f1Scores[i] == maxF1):
-        print(intervalRecherche)
-    i = i + 1
-    intervalRecherche = intervalRecherche + interval
+cat1 = workingDir + "test/formule1"
+cat2 = workingDir + "test/motoGrandPrix"
+cat3 = workingDir + "test/chat4"
+cat4 = workingDir + "test/chien3"
+print("Validate with F1 score (with validate data -> pictures)")
 
-print("All values of F1")
-for s in f1Scores:
-    print(s)
+automatedValidateDataSVM(c1, k1)
+
