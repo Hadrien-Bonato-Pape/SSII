@@ -80,7 +80,7 @@ def automatedTrainDataForSVM(c1, k1, toRecomputeKMEANS, verbose, minimal):
     if(verbose):
         print("SVM FIT")
     
-    classif = svm.SVC(c1,kernel='rbf')
+    classif = svm.SVC(c1, kernel='rbf', decision_function_shape='ovo')
     classif.fit(bows, groundTruth)
     
     with open(baryName + str(c1) + 'SVM.svm', 'wb') as output:
